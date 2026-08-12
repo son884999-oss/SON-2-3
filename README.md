@@ -1,6 +1,6 @@
 # DeepCheck
 
-DeepCheck는 재무 용어가 낯선 사용자가 기업의 수익성, 성장성, 재무 안정성, 현금흐름, 가격 수준과 위험 신호를 빠르게 이해하도록 돕는 기업 분석 웹 서비스입니다. 실제 공시 수치는 금융감독원 OpenDART에서 조회하고, 사용자가 선택한 기업은 Google Gemini API로 쉬운 문장으로 다시 분석할 수 있습니다.
+DeepCheck는 재무 용어가 낯선 사용자가 기업의 수익성, 성장성, 재무 안정성, 현금흐름, 가치 평가와 위험 신호를 빠르게 이해하도록 돕는 기업 분석 웹 서비스입니다. 실제 공시 수치는 금융감독원 OpenDART에서 조회하고, 사용자가 선택한 기업은 Google Gemini API로 쉬운 문장으로 다시 분석할 수 있습니다.
 
 ## 배포 주소
 
@@ -12,12 +12,13 @@ DeepCheck는 재무 용어가 낯선 사용자가 기업의 수익성, 성장성
 ## 화면과 기능
 
 - 홈: 서비스 설명, 기업 검색, 최근 확인 기업 비교
-- 기업분석: 종합점수, 핵심 지표, AI 분석, 5년 재무 흐름, 건강검진, 가격 수준, 위험 신호
+- 기업분석: 종합점수, 핵심 지표, AI 분석, 5년 재무 흐름, 재무 체력, 장기 가치 평가, 위험 신호
 - 종목찾기: 점수·저평가·실적·현금흐름·부채·ROE 조건 필터
-- 관심종목: 브라우저 `localStorage` 기반 추가·삭제 및 비교
+- 재무 용어사전: PER, PBR, ROE, FCF 등 핵심 용어를 쉬운 설명·예시·주의점으로 안내
+- 관심종목: 저장 상태가 보이는 추가·해제 버튼, 해제 후 되돌리기, 브라우저 `localStorage` 저장
 - 반응형 UI: 데스크톱 내비게이션, 모바일 하단 내비게이션, 데이터 표 가로 스크롤
 
-현재 지원 종목은 삼성전자, SK하이닉스, NAVER, 현대차, 기아입니다. DeepCheck는 실시간 시세를 제공하지 않으며, OpenDART 공시를 바탕으로 기업의 이익 창출력, 재무 안정성, 현금흐름과 장기 가치의 지속성을 분석합니다.
+삼성전자, SK하이닉스, NAVER, 현대차, 기아는 빠른 비교용 예시 기업입니다. 검색은 OpenDART 기업 고유번호 목록 전체를 대상으로 하므로 상장사는 종목코드 또는 기업명, 비상장 공시대상 기업은 기업명으로 조회할 수 있습니다. 다만 사업보고서가 없거나 표준 재무 계정을 제공하지 않는 기업은 분석 가능한 수치가 제한될 수 있습니다. DeepCheck는 실시간 시세를 제공하지 않습니다.
 
 ## 기술 스택과 구조
 
@@ -35,7 +36,10 @@ DeepCheck는 재무 용어가 낯선 사용자가 기업의 수익성, 성장성
 ├─ js/app.js           # 검색, 이동, API 요청, 상태 처리
 ├─ api/analyze.py      # Gemini 분석 엔드포인트
 ├─ api/company.py      # OpenDART 재무정보 엔드포인트
+├─ api/search.py       # OpenDART 전체 기업 검색 엔드포인트
 ├─ SERVICE_PLAN.md     # 서비스 기획서
+├─ QUEST_AUDIT.md      # QUEST 요구사항 준수 점검
+├─ CODE_GUIDE.md       # 전체 구조도·함수·문법 안내
 └─ SUBMISSION_CHECKLIST.md
 ```
 
@@ -100,6 +104,10 @@ npx vercel dev
 
 최근 사업보고서를 조회해 매출, 영업이익, 순이익, 부채비율, 유동비율, ROE, 영업이익률, FCF를 반환합니다. API 오류 시 화면은 예시 데이터를 유지하고 오류 안내를 표시합니다.
 
+### `GET /api/search?q=기업명`
+
+OpenDART 전체 기업 고유번호 목록에서 기업명 또는 6자리 종목코드를 검색합니다. 결과의 `corpCode`를 `/api/company?corpCode=...`에 전달하면 하드코딩되지 않은 기업도 조회할 수 있습니다.
+
 ## Vercel 배포
 
 1. 변경사항을 GitHub에 commit/push합니다.
@@ -114,6 +122,8 @@ npx vercel dev
 ## 제출 자료
 
 - 서비스 기획서: [SERVICE_PLAN.md](SERVICE_PLAN.md)
+- QUEST 준수 점검: [QUEST_AUDIT.md](QUEST_AUDIT.md)
+- 코드 구조·함수·문법 안내서: [CODE_GUIDE.md](CODE_GUIDE.md)
 - 제출 및 테스트 체크리스트: [SUBMISSION_CHECKLIST.md](SUBMISSION_CHECKLIST.md)
 - 비전공자용 배포 안내서: [BEGINNER_GUIDE.md](BEGINNER_GUIDE.md)
 - 필요한 캡처: 데스크톱 홈, 모바일 홈, 실제 AI 응답 화면, AI 코딩 도구 사용 과정

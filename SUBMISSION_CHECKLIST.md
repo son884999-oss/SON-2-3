@@ -4,11 +4,14 @@
 
 - [x] 순수 HTML/CSS/JavaScript 프론트 구조
 - [x] Python Vercel Serverless Functions 구조
-- [x] 홈, 기업분석, 종목찾기, 관심종목 4개 화면
+- [x] 홈, 기업분석, 종목찾기, 용어사전, 관심종목 5개 화면
 - [x] 데스크톱·모바일 반응형 레이아웃
 - [x] 기업 검색과 빈 입력 안내
-- [x] 관심종목 저장과 삭제
+- [x] 관심종목 추가·해제, 해제 후 되돌리기
+- [x] QUEST 요구사항 준수 점검 문서
+- [x] 전체 코드 구조도·함수·문법 안내서
 - [x] OpenDART 공시 데이터 연동 코드
+- [x] OpenDART 전체 기업명·종목코드 검색과 동적 `corpCode` 조회
 - [x] Google Gemini API 연동 코드
 - [x] AI 로딩, 중복 호출 방지, 오류, 요청 과다, 지연 처리
 - [x] README의 소개, 기술 스택, 실행·배포 방법, 환경 변수 설명
@@ -17,8 +20,9 @@
 
 ## 계정 소유자가 해야 하는 항목
 
-- [ ] OpenDART 인증키 발급
-- [ ] Google AI Studio에서 Gemini API 키 발급 및 사용 한도 확인
+- [x] 로컬 OpenDART 인증키 설정
+- [x] 로컬 Gemini API 키와 모델 설정
+- [ ] 각 API 계정의 사용 한도 확인
 - [ ] GitHub에 변경사항 commit/push
 - [ ] Vercel에서 GitHub 저장소 Import
 - [ ] Vercel 환경 변수 `DART_API_KEY`, `GEMINI_API_KEY`, 선택적 `GEMINI_MODEL` 등록
@@ -35,7 +39,7 @@
 4. `다시 분석`을 누르고 로딩 상태 이후 실제 AI 문장이 반영되는지 확인한다.
 5. 관심종목을 추가하고 관심종목 메뉴에서 목록이 유지되는지 확인한다.
 6. 종목찾기에서 `80점 이상`과 다른 필터가 작동하는지 확인한다.
-7. 브라우저 폭 390px에서 하단 메뉴 4개와 검색 버튼이 보이는지 확인한다.
+7. 브라우저 폭 390px에서 하단 메뉴 5개와 검색 버튼이 보이는지 확인한다.
 8. 모바일 표를 좌우로 스크롤해 점수, PER, ROE를 확인할 수 있는지 확인한다.
 9. 개발자 도구 Console에 JavaScript 오류가 없는지 확인한다.
 10. 배포 소스와 스크린샷에 API 키가 노출되지 않았는지 확인한다.
@@ -46,4 +50,5 @@
 - [ ] GitHub 저장소 URL
 - [x] README.md
 - [x] SERVICE_PLAN.md
+- [x] QUEST_AUDIT.md와 CODE_GUIDE.md
 - [ ] 증빙 자료 1세트(데스크톱, 모바일, AI 동작, AI 코딩 도구 사용 과정)

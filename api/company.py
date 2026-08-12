@@ -1,18 +1,48 @@
 import json
+import io
 import os
 import urllib.parse
 import urllib.request
+import zipfile
+import xml.etree.ElementTree as ET
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler
 
 
-COMPANIES = {
-    "005930": {"name": "삼성전자", "corp_code": "00126380"},
-    "000660": {"name": "SK하이닉스", "corp_code": "00164779"},
-    "035420": {"name": "NAVER", "corp_code": "00266961"},
-    "005380": {"name": "현대차", "corp_code": "00164742"},
-    "000270": {"name": "기아", "corp_code": "00106641"},
-}
+CORP_CODE_URL = "https://opendart.fss.or.kr/api/corpCode.xml"
+_companies = None
+
+
+def load_companies(api_key):
+    global _companies
+    if _companies is not None:
+        return _companies
+    url = f"{CORP_CODE_URL}?{urllib.parse.urlencode({'crtfc_key': api_key})}"
+    request = urllib.request.Request(url, headers={"User-Agent": "DeepCheck/1.0"})
+    with urllib.request.urlopen(request, timeout=20) as response:
+        archive = zipfile.ZipFile(io.BytesIO(response.read()))
+        xml_data = archive.read("CORPCODE.xml")
+    root = ET.fromstring(xml_data)
+    _companies = {
+        item.findtext("corp_code", "").strip(): {
+            "name": item.findtext("corp_name", "").strip(),
+            "stock_code": item.findtext("stock_code", "").strip(),
+        }
+        for item in root.findall("list")
+    }
+    return _companies
+
+
+def resolve_company(api_key, corp_code, stock_code):
+    companies = load_companies(api_key)
+    if corp_code and corp_code in companies:
+        return corp_code, companies[corp_code]
+    if stock_code:
+        for code, company in companies.items():
+            if company["stock_code"] == stock_code:
+                return code, company
+    return None, None
 
 
 def number(value):
@@ -82,14 +112,14 @@ def ratio(numerator, denominator):
     return round(numerator / denominator * 100, 1) if denominator else None
 
 
-def fetch_year(api_key, corp_code, year):
+def fetch_year(api_key, corp_code, year, fs_div="CFS"):
     query = urllib.parse.urlencode(
         {
             "crtfc_key": api_key,
             "corp_code": corp_code,
             "bsns_year": str(year),
             "reprt_code": "11011",
-            "fs_div": "CFS",
+            "fs_div": fs_div,
         }
     )
     request = urllib.request.Request(
@@ -98,6 +128,8 @@ def fetch_year(api_key, corp_code, year):
     )
     with urllib.request.urlopen(request, timeout=15) as response:
         payload = json.loads(response.read().decode("utf-8"))
+    if payload.get("status") == "013" and fs_div == "CFS":
+        return fetch_year(api_key, corp_code, year, "OFS")
     if payload.get("status") == "013":
         return None
     if payload.get("status") != "000":
@@ -114,16 +146,19 @@ class handler(BaseHTTPRequestHandler):
 
             query = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
             stock_code = query.get("stockCode", [""])[0].strip()
-            company = COMPANIES.get(stock_code)
-            if not stock_code:
-                return self.send_json(400, {"error": "종목코드를 입력해주세요."})
+            corp_code = query.get("corpCode", [""])[0].strip()
+            corp_code, company = resolve_company(api_key, corp_code, stock_code)
+            if not stock_code and not corp_code:
+                return self.send_json(400, {"error": "기업 고유번호 또는 종목코드를 입력해주세요."})
             if not company:
-                return self.send_json(404, {"error": "아직 지원하지 않는 종목입니다."})
+                return self.send_json(404, {"error": "OpenDART 기업 목록에서 찾을 수 없습니다."})
 
             current_year = datetime.now(timezone.utc).year
             history = []
-            for year in range(current_year - 5, current_year):
-                data = fetch_year(api_key, company["corp_code"], year)
+            years = list(range(current_year - 5, current_year))
+            with ThreadPoolExecutor(max_workers=5) as executor:
+                year_data = list(executor.map(lambda year: fetch_year(api_key, corp_code, year), years))
+            for year, data in zip(years, year_data):
                 if data and data.get("revenue"):
                     history.append({"year": year, **data})
 
@@ -146,8 +181,9 @@ class handler(BaseHTTPRequestHandler):
                 200,
                 {
                     "company": company["name"],
-                    "stockCode": stock_code,
-                    "source": "금융감독원 OpenDART 연결재무제표",
+                    "stockCode": company["stock_code"],
+                    "corpCode": corp_code,
+                    "source": "금융감독원 OpenDART 재무제표",
                     "latestYear": latest["year"],
                     "updatedAt": datetime.now(timezone.utc).isoformat(),
                     "indicators": indicators,

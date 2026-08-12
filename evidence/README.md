@@ -3,6 +3,10 @@
 - `desktop-home.png`: 1440px 데스크톱 홈 화면
 - `mobile-home.png`: 390px 모바일 홈 화면
 - `desktop-analysis.png`: 데스크톱 기업분석 화면
+- `audit-desktop.png`: 2차 UI/UX 점검 후 데스크톱 홈
+- `audit-glossary.png`: 2차 UI/UX 점검 후 용어사전
+
+모바일 제출 증빙에는 실제 브라우저 개발자 도구를 390px로 설정해 캡처한 `mobile-home.png`을 사용하세요.
 
 `ai-live-result.png`는 실제 `GEMINI_API_KEY`를 Vercel에 설정하고 배포한 뒤, `다시 분석`으로 새 문장이 반영된 상태를 직접 캡처해 이 폴더에 추가하세요. API 키나 Vercel 환경 변수 설정 화면은 캡처하지 않습니다.
 
