@@ -116,7 +116,7 @@ const FindResults = [
   { id: 'sk', name: 'SK하이닉스', score: 75, status: '양호', per: '14.8배', roe: '15.2%', note: 'AI 메모리 중심의 성장 회복' },
   { id: 'hyundai', name: '현대차', score: 84, status: '우수', per: '5.6배', roe: '13.9%', note: '재무 안정성과 높은 수익성' },
   { id: 'naver', name: 'NAVER', score: 81, status: '우수', per: '19.2배', roe: '10.6%', note: '플랫폼 현금 창출력 우수' },
-  { id: 'kia', name: '기아', score: 86, status: '우수', per: '4.9배', roe: '20.1%', note: '높은 자본 활용도와 이익 체력' },
+  { id: 'kia', name: '기아', score: 86, status: '우수', per: '4.9배', roe: '20.1%', note: '높은 자본 활용도와 이익 창출력' },
 ];
 
 const FilterItems = [

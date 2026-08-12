@@ -66,7 +66,7 @@ requirements.txt       외부 Python 패키지 없음
 | `Health` | 부채비율·유동비율·ROE·영업이익률·FCF 설명 |
 | `FindResults` | 비교 표와 필터용 5개 기업 행 데이터 |
 | `FilterItems` | 종목찾기 필터 ID와 표시 문구 |
-| `GlossaryTerms` | 용어, 한글명, 쉬운 뜻, 예시, 주의점 |
+| `GlossaryTerms` | 용어, 한글명, 정의, 해석 예시, 확인 사항 |
 
 ### `js/components.js`
 
