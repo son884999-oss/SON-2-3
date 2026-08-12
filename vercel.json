@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "regions": ["icn1"],
   "builds": [
     { "src": "api/analyze.py", "use": "@vercel/python" },
     { "src": "api/company.py", "use": "@vercel/python" },
