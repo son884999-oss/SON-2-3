@@ -54,6 +54,10 @@ function renderAnalysisView(c) {
     .replace('낮은 부채와 충분한 현금으로 재무구조가 안정적입니다.', 'OpenDART 공시의 부채비율과 현금흐름을 기준으로 재무 건전성을 확인합니다.');
 }
 
+function renderUnavailableCompanyView(c, message, reason) {
+  return `<header class="analysis-header"><div class="container company-heading"><div><p class="kicker">${c.ticker}</p><h1>${c.name}</h1><p class="company-summary">OpenDART에서 기업은 확인했지만 분석에 필요한 재무제표 수치를 찾지 못했습니다.</p></div></div></header><section class="section compact"><div class="container narrow unavailable-company"><p class="kicker">조회 결과</p><h2>${message}</h2><p>${reason || '최근 사업보고서가 없거나 OpenDART 전체 재무제표 API에서 표준 수치를 제공하지 않는 기업일 수 있습니다.'}</p><dl><div><dt>기업 고유번호</dt><dd>${c.corpCode}</dd></div><div><dt>왜 기업은 검색되나요?</dt><dd>OpenDART 기업 목록에는 상장사뿐 아니라 비상장 공시대상 법인도 포함됩니다.</dd></div><div><dt>왜 분석은 안 되나요?</dt><dd>기업 목록 등록과 기계 판독 가능한 사업보고서 재무제표 제공 여부는 서로 다릅니다.</dd></div></dl><button class="primary-btn" data-view="search">다른 기업 검색하기</button></div></section><div class="disclaimer">재무자료가 없는 기업의 수치를 다른 기업의 예시 데이터로 대신 표시하지 않습니다.</div>`;
+}
+
 function renderFindView(items = FilterItems, results = FindResults) {
   return `<header class="page-header"><div class="container"><p class="kicker">종목찾기</p><h1>내 기준에 맞는 기업 비교</h1><p>중요하게 보는 조건을 선택하면 관련 기업만 남겨 비교할 수 있습니다.</p></div></header><section class="section compact"><div class="container"><div class="filter-bar" role="group" aria-label="기업 필터">${items.map(f => `<button class="filter-btn ${f[0] === 'all' ? 'active' : ''}" data-filter="${f[0]}">${f[1]}</button>`).join('')}</div><p class="results-summary"><strong>${results.length}개</strong> 기업</p>${companyTable(results)}</div></section>`;
 }

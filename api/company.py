@@ -163,7 +163,15 @@ class handler(BaseHTTPRequestHandler):
                     history.append({"year": year, **data})
 
             if not history:
-                return self.send_json(404, {"error": "조회 가능한 사업보고서가 없습니다."})
+                return self.send_json(
+                    422,
+                    {
+                        "error": "OpenDART 기업 목록에는 등록되어 있지만 분석 가능한 최근 재무제표가 없습니다.",
+                        "reason": "비상장 기업은 기업 정보가 등록되어 있어도 전체 재무제표 API에 사업보고서 수치가 제공되지 않을 수 있습니다.",
+                        "company": company["name"],
+                        "corpCode": corp_code,
+                    },
+                )
 
             latest = history[-1]
             indicators = {
