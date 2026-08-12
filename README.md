@@ -7,8 +7,6 @@ DeepCheck는 재무 용어에 익숙하지 않은 사용자가 기업의 수익�
 - Vercel: https://son-2-3.vercel.app/
 - GitHub: https://github.com/son884999-oss/SON-2-3
 
-두 주소는 계정 소유자가 배포와 push를 마친 뒤 직접 입력해야 합니다.
-
 ## 화면과 기능
 
 - 홈: 서비스 설명, 기업 검색, 최근 확인 기업 비교

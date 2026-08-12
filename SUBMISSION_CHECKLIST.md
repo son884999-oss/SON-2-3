@@ -17,19 +17,20 @@
 - [x] README의 소개, 기술 스택, 실행·배포 방법, 환경 변수 설명
 - [x] 서비스 기획서와 AI 입력·출력·실패 기준
 - [x] 미사용 Next.js/React 중복 구현 제거
+- [x] 모바일 기업분석 화면 단일 열·세로형 핵심 지표·표 스크롤 개선
+- [x] GitHub 저장소와 Vercel 배포 URL 연결
+- [x] Vercel 환경 변수 등록
 
 ## 계정 소유자가 해야 하는 항목
 
 - [x] 로컬 OpenDART 인증키 설정
 - [x] 로컬 Gemini API 키와 모델 설정
 - [ ] 각 API 계정의 사용 한도 확인
-- [ ] GitHub에 변경사항 commit/push
-- [ ] Vercel에서 GitHub 저장소 Import
-- [ ] Vercel 환경 변수 `DART_API_KEY`, `GEMINI_API_KEY`, 선택적 `GEMINI_MODEL` 등록
-- [ ] 실제 배포 후 AI와 OpenDART 응답 확인
-- [ ] README에 GitHub URL과 Vercel URL 입력 후 다시 push
-- [ ] 데스크톱 홈, 모바일 홈, 실제 AI 응답 화면 캡처
-- [ ] 이번 Codex 대화 화면을 AI 코딩 도구 사용 증빙으로 캡처
+- [ ] 이번 최종 변경사항의 Vercel 자동 배포가 `Ready`인지 확인
+- [x] 실제 배포 후 AI와 OpenDART 응답 확인
+- [x] README에 GitHub URL과 Vercel URL 입력
+- [x] 데스크톱·모바일 화면과 AI 코딩 도구 사용 화면 캡처 준비
+- [ ] 실제 배포 Gemini 응답 화면 캡처
 
 ## 배포 후 기능 테스트
 
@@ -46,9 +47,9 @@
 
 ## 제출 파일 5종
 
-- [ ] 배포된 웹 서비스 URL
-- [ ] GitHub 저장소 URL
+- [x] 배포된 웹 서비스 URL
+- [x] GitHub 저장소 URL
 - [x] README.md
 - [x] SERVICE_PLAN.md
 - [x] QUEST_AUDIT.md와 CODE_GUIDE.md
-- [ ] 증빙 자료 1세트(데스크톱, 모바일, AI 동작, AI 코딩 도구 사용 과정)
+- [ ] 증빙 자료 1세트(현재 실제 AI 동작 장면만 추가 필요)

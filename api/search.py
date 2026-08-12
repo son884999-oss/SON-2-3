@@ -80,6 +80,11 @@ class handler(BaseHTTPRequestHandler):
         encoded = json.dumps(body, ensure_ascii=False).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Cache-Control", "s-maxage=86400, stale-while-revalidate=604800")
+        cache_control = (
+            "s-maxage=86400, stale-while-revalidate=604800"
+            if status == 200
+            else "no-store"
+        )
+        self.send_header("Cache-Control", cache_control)
         self.end_headers()
         self.wfile.write(encoded)

@@ -97,6 +97,7 @@ requirements.txt       외부 Python 패키지 없음
 | `saveWatchlist()` | 관심종목 배열 저장 |
 | `refreshWatchControls(id)` | 동일 기업 버튼 상태 동기화 |
 | `toggleWatch(id)` | 추가/해제와 해제 되돌리기 |
+| `bindGlossaryTracking()` | 스크롤 위치에 맞춰 현재 용어를 갱신하고 중복 감지기를 방지 |
 | `openGlossary(term)` | 선택 용어 저장 후 사전 이동 |
 | `updateCount()` | 상단 관심종목 개수 갱신 |
 | `applyFilter(id)` | 선택 조건으로 기업 목록 필터링 |
@@ -109,7 +110,7 @@ requirements.txt       외부 Python 패키지 없음
 | `runAI(company)` | Gemini 요청, 25초 제한, 상태 처리 |
 | `showToast(message, action)` | 5초 알림과 선택적 액션 생성 |
 
-주요 전역 상태는 `currentView`, `currentCompany`, `watchlist`, `realDataCache`입니다.
+주요 전역 상태는 `currentView`, `currentCompany`, `watchlist`, `realDataCache`, `glossaryScrollHandler`입니다. `glossaryScrollHandler`는 용어사전을 다시 방문할 때 이전 스크롤 이벤트를 제거하기 위해 별도로 보관합니다.
 
 ## 5. Python 함수와 클래스 전체 목록
 

@@ -198,13 +198,22 @@ class handler(BaseHTTPRequestHandler):
                     "history": history,
                 },
             )
-        except Exception as error:
-            self.send_json(502, {"error": f"OpenDART 조회 실패: {str(error)}"})
+        except (urllib.error.URLError, TimeoutError):
+            self.send_json(504, {"error": "OpenDART 응답이 지연되고 있습니다. 잠시 후 다시 시도해주세요."})
+        except ValueError:
+            self.send_json(502, {"error": "OpenDART 재무정보 응답을 처리하지 못했습니다."})
+        except Exception:
+            self.send_json(500, {"error": "기업 재무정보 조회 중 오류가 발생했습니다."})
 
     def send_json(self, status, body):
         encoded = json.dumps(body, ensure_ascii=False).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Cache-Control", "s-maxage=21600, stale-while-revalidate=86400")
+        cache_control = (
+            "s-maxage=21600, stale-while-revalidate=86400"
+            if status == 200
+            else "no-store"
+        )
+        self.send_header("Cache-Control", cache_control)
         self.end_headers()
         self.wfile.write(encoded)
