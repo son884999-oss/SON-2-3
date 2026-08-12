@@ -1,77 +1,123 @@
 # DeepCheck
 
-복잡한 재무제표를 모르는 일반 사용자도 기업의 수익성, 성장성, 재무 안정성, 현금흐름, 밸류에이션과 위험 신호를 빠르게 이해하도록 돕는 기업분석 MVP입니다. PER, PBR, ROE, FCF 등 실제 금융 용어는 유지하되 각 지표 아래에 쉬운 설명을 함께 제공합니다.
+DeepCheck는 재무 용어가 낯선 사용자가 기업의 수익성, 성장성, 재무 안정성, 현금흐름, 가격 수준과 위험 신호를 빠르게 이해하도록 돕는 기업 분석 웹 서비스입니다. 실제 공시 수치는 금융감독원 OpenDART에서 조회하고, 사용자가 선택한 기업은 Google Gemini API로 쉬운 문장으로 다시 분석할 수 있습니다.
 
-## 주요 화면과 기능
+## 배포 주소
 
-- 홈: 서비스 소개, 기업 검색, 인기 기업 바로가기
-- 기업분석: DeepCheck Score, 5대 핵심지표, AI 요약, 5년 재무 흐름, 건강검진, 밸류에이션, 위험 신호
-- 종목찾기: 점수·저평가·실적·현금흐름·ROE 조건 필터
-- 관심종목: localStorage 기반 추가·삭제 및 지속 저장
-- 모바일: 하단 탐색 메뉴와 1열 카드 레이아웃
-- 실제 재무정보: 금융감독원 OpenDART 연결재무제표 기반 최근 5개 사업연도
+- Vercel: **배포 후 URL 입력 필요**
+- GitHub: **저장소 URL 입력 필요**
 
-## 기술 스택
+두 주소는 계정 소유자가 배포와 push를 마친 뒤 직접 입력해야 합니다.
 
-프론트엔드는 순수 HTML/CSS/JavaScript, 백엔드는 Vercel Python Serverless Function으로 구성했습니다. 프레임워크와 외부 차트 라이브러리 없이 가벼운 막대 차트를 구현했습니다. Mock 데이터와 UI 렌더링을 분리해 실제 기업 데이터 API로 교체하기 쉽습니다.
+## 화면과 기능
+
+- 홈: 서비스 설명, 기업 검색, 최근 확인 기업 비교
+- 기업분석: 종합점수, 핵심 지표, AI 분석, 5년 재무 흐름, 건강검진, 가격 수준, 위험 신호
+- 종목찾기: 점수·저평가·실적·현금흐름·부채·ROE 조건 필터
+- 관심종목: 브라우저 `localStorage` 기반 추가·삭제 및 비교
+- 반응형 UI: 데스크톱 내비게이션, 모바일 하단 내비게이션, 데이터 표 가로 스크롤
+
+현재 지원 종목은 삼성전자, SK하이닉스, NAVER, 현대차, 기아입니다. DeepCheck는 실시간 시세를 제공하지 않으며, OpenDART 공시를 바탕으로 기업의 이익 창출력, 재무 안정성, 현금흐름과 장기 가치의 지속성을 분석합니다.
+
+## 기술 스택과 구조
+
+- 프론트엔드: HTML, CSS, 순수 JavaScript
+- 백엔드: Vercel Python Serverless Functions
+- AI: Google Gemini Interactions API
+- 재무 데이터: 금융감독원 OpenDART API
+
+```text
+.
+├─ index.html          # 공통 내비게이션과 앱 진입점
+├─ css/style.css       # 디자인 토큰, 레이아웃, 반응형 스타일
+├─ js/data.js          # MVP 기업 예시 데이터
+├─ js/components.js    # 화면별 HTML 렌더링
+├─ js/app.js           # 검색, 이동, API 요청, 상태 처리
+├─ api/analyze.py      # Gemini 분석 엔드포인트
+├─ api/company.py      # OpenDART 재무정보 엔드포인트
+├─ SERVICE_PLAN.md     # 서비스 기획서
+└─ SUBMISSION_CHECKLIST.md
+```
+
+## 사용자 입력에서 결과 출력까지
+
+1. 사용자가 기업명이나 종목코드를 입력합니다.
+2. `js/app.js`가 입력을 검사하고 해당 기업 분석 화면을 렌더링합니다.
+3. 분석 화면은 `fetch('/api/company?...')`로 공시 데이터를 요청합니다.
+4. 사용자가 `다시 분석`을 누르면 회사명이 `fetch('/api/analyze')`의 JSON 본문으로 전달됩니다.
+5. Python 서버리스 함수가 서버 환경 변수의 API 키로 외부 API를 호출합니다.
+6. JavaScript가 성공 결과를 본문에 반영하고, 오류·지연은 사용자 메시지로 안내합니다.
+
+API 키는 브라우저로 전달하지 않고 서버에서만 읽습니다. 키가 프론트 코드에 있으면 웹사이트 방문자가 개발자 도구로 확인할 수 있기 때문입니다. Google도 Gemini 키를 서버 환경 변수에 보관할 것을 권장합니다.
+
+## 환경 변수
+
+루트에 `.env.local`을 만들되 Git에는 올리지 않습니다.
+
+```env
+DART_API_KEY=OpenDART에서_발급받은_인증키
+GEMINI_API_KEY=Google_AI_Studio에서_발급받은_API_키
+GEMINI_MODEL=gemini-2.5-flash
+```
+
+- `DART_API_KEY`: 실제 재무정보 조회에 필요
+- `GEMINI_API_KEY`: 실제 AI 분석에 필요
+- `GEMINI_MODEL`: 선택 사항이며 미설정 시 `gemini-2.5-flash` 사용
+
+`.env.local`은 `.gitignore`의 `.env*` 규칙으로 제외됩니다. 키가 노출됐다고 의심되면 즉시 폐기·재발급하고, 공개 커밋 기록에서도 제거해야 합니다.
 
 ## 로컬 실행
+
+정적 UI만 확인:
 
 ```bash
 python -m http.server 8000
 ```
 
-브라우저에서 `http://localhost:8000`을 엽니다. 이 방식은 정적 화면만 제공하므로 `/api/company`, `/api/analyze`는 실행되지 않습니다. 실제 OpenDART 연결까지 로컬에서 확인하려면 프로젝트 폴더에서 아래 명령을 사용합니다.
+`http://localhost:8000`을 엽니다. 이 방법에서는 Python API가 실행되지 않아 예시 재무 데이터가 표시됩니다.
+
+API까지 확인하려면 Node.js와 Vercel CLI가 필요합니다.
 
 ```bash
 npx vercel dev
 ```
 
-터미널에 표시된 주소(일반적으로 `http://localhost:3000`)를 열고 삼성전자 등을 검색합니다. 분석 화면 상단에 `실제 공시 데이터` 안내가 나타나면 연결에 성공한 것입니다.
+처음 실행하면 Vercel 로그인과 프로젝트 연결을 요청할 수 있습니다. 표시된 로컬 주소에서 삼성전자를 검색한 뒤 실제 공시 데이터 안내와 AI 분석 응답을 확인합니다.
 
-## 환경 변수
+## API 명세와 실패 처리
 
-프로젝트 루트의 `.env.local`에는 다음처럼 키를 저장합니다.
+### `POST /api/analyze`
 
-```env
-DART_API_KEY=발급받은_OpenDART_인증키
-OPENAI_API_KEY=선택사항인_OpenAI_API_키
+요청:
+
+```json
+{ "company": "삼성전자" }
 ```
 
-`DART_API_KEY`는 실제 재무정보 조회에 필요합니다. `OPENAI_API_KEY`는 AI 재요약 기능에만 필요하며, 선택적으로 `OPENAI_MODEL`을 설정할 수 있습니다. API 키는 프론트엔드 코드, README, 스크린샷에 절대 넣지 않습니다. `.env.local`은 `.gitignore`에 포함되어 있습니다.
+성공 응답은 `analysis`를 반환합니다. 빈 입력과 80자 초과 입력은 `400`, 키 미설정은 `503`, 외부 API 오류는 `502`, 지연은 `504`로 안내합니다. 프론트엔드는 25초 후 요청을 중단하고 다시 시도하라는 메시지를 표시하며, 중복 요청 방지를 위해 호출 중 버튼을 비활성화합니다.
 
-## 배포
+### `GET /api/company?stockCode=005930`
 
-1. 프로젝트를 GitHub 저장소에 push합니다.
-2. Vercel에서 저장소를 Import합니다.
+최근 사업보고서를 조회해 매출, 영업이익, 순이익, 부채비율, 유동비율, ROE, 영업이익률, FCF를 반환합니다. API 오류 시 화면은 예시 데이터를 유지하고 오류 안내를 표시합니다.
+
+## Vercel 배포
+
+1. 변경사항을 GitHub에 commit/push합니다.
+2. Vercel에서 해당 저장소를 Import합니다.
 3. Framework Preset은 `Other`, Output Directory는 비워 둡니다.
-4. 환경 변수를 등록하고 Deploy합니다.
-5. 배포 URL에서 검색, 메뉴 이동, 관심종목, 모바일 레이아웃, AI 응답을 확인합니다.
+4. Vercel 프로젝트의 Environment Variables에 `DART_API_KEY`, `GEMINI_API_KEY`, 선택적으로 `GEMINI_MODEL`을 등록합니다.
+5. Deploy 후 발급된 URL에서 메뉴, 검색, 관심종목, OpenDART, AI 분석, 모바일 화면을 확인합니다.
+6. 이 README의 배포 주소를 실제 URL로 교체한 뒤 다시 commit/push합니다.
 
-배포 URL: 배포 후 여기에 Vercel URL을 기입하세요.
+로컬 `.env.local`은 Vercel에 자동 업로드되지 않습니다. 배포 환경 변수는 Vercel 프로젝트 설정에 별도로 등록해야 하며, 변경 후에는 재배포해야 적용됩니다.
 
-## AI 기능 흐름과 실패 처리
+## 제출 자료
 
-사용자가 기업 상세에서 “AI로 다시 분석”을 누르면 JavaScript가 JSON을 `/api/analyze`에 POST합니다. Python 함수는 빈 입력을 400으로 거절하고, API 키가 있으면 OpenAI Responses API 결과를 반환합니다. 키가 없으면 데모 응답을 반환하며, 네트워크나 5xx 오류가 나면 프론트엔드가 안내 토스트와 기존 분석을 보여 줍니다. 호출 중에는 로딩 상태와 버튼 비활성화를 적용해 중복 호출을 막습니다.
+- 서비스 기획서: [SERVICE_PLAN.md](SERVICE_PLAN.md)
+- 제출 및 테스트 체크리스트: [SUBMISSION_CHECKLIST.md](SUBMISSION_CHECKLIST.md)
+- 비전공자용 배포 안내서: [BEGINNER_GUIDE.md](BEGINNER_GUIDE.md)
+- 필요한 캡처: 데스크톱 홈, 모바일 홈, 실제 AI 응답 화면, AI 코딩 도구 사용 과정
 
-## 실제 재무데이터 연결
+## 주의 사항
 
-`/api/company?stockCode=005930` 형식으로 Python 서버리스 함수를 호출합니다. 서버는 종목코드를 DART 고유번호로 변환하고 최근 5개 사업연도의 연결재무제표를 조회합니다. 매출, 영업이익, 순이익으로 차트를 구성하고 다음 지표를 계산합니다.
-
-- 부채비율 = 부채총계 ÷ 자본총계
-- 유동비율 = 유동자산 ÷ 유동부채
-- ROE = 당기순이익 ÷ 자본총계
-- 영업이익률 = 영업이익 ÷ 매출
-- FCF = 영업활동현금흐름 − 유형·무형자산 취득액
-
-현재 실제 재무데이터를 지원하는 종목은 삼성전자, SK하이닉스, NAVER, 현대차, 기아입니다. OpenDART는 실시간 주가 API가 아니므로 화면의 현재가와 등락률은 MVP 예시 데이터입니다. 실제 주가를 공개 서비스에 제공하려면 별도의 시세 공급자와 재배포 이용 조건을 확인해야 합니다.
-
-## 기획 요약
-
-- 대상: 재무 용어가 낯선 주식 초보자와 일반 투자자
-- 핵심 가치: 5초 안에 기업 상태를 파악하고 어려운 용어를 쉬운 말로 이해
-- 서비스 한계: 정보 제공용이며 특정 종목의 매수·매도를 권유하지 않음
-
-## 제출 전 준비
-
-데스크톱 홈, 모바일 홈, AI 분석 결과 화면을 캡처하고 AI 코딩 도구 사용 과정 캡처를 별도로 준비하세요. 실제 배포 URL과 GitHub 저장소 URL은 제출 전에 이 문서에 추가해야 합니다.
+DeepCheck는 정보 제공용 학습 프로젝트입니다. 특정 종목의 매수 또는 매도를 권유하지 않으며, API 호출에는 사용량 제한과 비용이 발생할 수 있습니다.
