@@ -5,7 +5,6 @@ import urllib.parse
 import urllib.request
 import zipfile
 import xml.etree.ElementTree as ET
-from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler
 
@@ -35,9 +34,9 @@ def load_companies(api_key):
 
 
 def resolve_company(api_key, corp_code, stock_code):
+    if corp_code and len(corp_code) == 8 and corp_code.isdigit():
+        return corp_code, {"name": "OpenDART 기업", "stock_code": stock_code}
     companies = load_companies(api_key)
-    if corp_code and corp_code in companies:
-        return corp_code, companies[corp_code]
     if stock_code:
         for code, company in companies.items():
             if company["stock_code"] == stock_code:
@@ -147,18 +146,19 @@ class handler(BaseHTTPRequestHandler):
             query = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
             stock_code = query.get("stockCode", [""])[0].strip()
             corp_code = query.get("corpCode", [""])[0].strip()
+            company_name = query.get("companyName", [""])[0].strip()
             corp_code, company = resolve_company(api_key, corp_code, stock_code)
             if not stock_code and not corp_code:
                 return self.send_json(400, {"error": "기업 고유번호 또는 종목코드를 입력해주세요."})
             if not company:
                 return self.send_json(404, {"error": "OpenDART 기업 목록에서 찾을 수 없습니다."})
+            if company_name:
+                company["name"] = company_name[:100]
 
             current_year = datetime.now(timezone.utc).year
             history = []
-            years = list(range(current_year - 5, current_year))
-            with ThreadPoolExecutor(max_workers=5) as executor:
-                year_data = list(executor.map(lambda year: fetch_year(api_key, corp_code, year), years))
-            for year, data in zip(years, year_data):
+            for year in range(current_year - 5, current_year):
+                data = fetch_year(api_key, corp_code, year)
                 if data and data.get("revenue"):
                     history.append({"year": year, **data})
 
