@@ -5,7 +5,7 @@ DeepCheck는 재무 용어가 낯선 사용자가 기업의 수익성, 성장성
 ## 배포 주소
 
 - Vercel: **배포 후 URL 입력 필요**
-- GitHub: **저장소 URL 입력 필요**
+- GitHub: https://github.com/son884999-oss/SON-2-3
 
 두 주소는 계정 소유자가 배포와 push를 마친 뒤 직접 입력해야 합니다.
 
