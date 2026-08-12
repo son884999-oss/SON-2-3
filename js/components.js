@@ -40,7 +40,7 @@ const companyRow = c => `
     <td class="numeric">${c.per || '-'}</td>
     <td class="numeric">${c.roe || '-'}</td>
     <td class="row-note">${c.note}</td>
-    <td class="row-actions"><button class="text-btn" data-open="${c.id}">분석 보기</button>${watchButton(c.id, true)}</td>
+    <td class="row-actions"><div class="row-action-group"><button class="text-btn" data-open="${c.id}">분석 보기</button>${watchButton(c.id, true)}</div></td>
   </tr>`;
 
 const companyTable = results => `
