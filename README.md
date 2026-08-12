@@ -36,7 +36,6 @@ DeepCheck는 재무 용어에 익숙하지 않은 사용자가 기업의 수익�
 ├─ api/company.py      # OpenDART 재무정보 엔드포인트
 ├─ api/search.py       # OpenDART 전체 기업 검색 엔드포인트
 ├─ SERVICE_PLAN.md     # 서비스 기획서
-├─ QUEST_AUDIT.md      # QUEST 요구사항 준수 점검
 ├─ CODE_GUIDE.md       # 전체 구조도·함수·문법 안내
 └─ SUBMISSION_CHECKLIST.md
 ```
@@ -120,10 +119,8 @@ OpenDART 전체 기업 고유번호 목록에서 기업명 또는 6자리 종목
 ## 제출 자료
 
 - 서비스 기획서: [SERVICE_PLAN.md](SERVICE_PLAN.md)
-- QUEST 준수 점검: [QUEST_AUDIT.md](QUEST_AUDIT.md)
 - 코드 구조·함수·문법 안내서: [CODE_GUIDE.md](CODE_GUIDE.md)
 - 제출 및 테스트 체크리스트: [SUBMISSION_CHECKLIST.md](SUBMISSION_CHECKLIST.md)
-- 비전공자용 배포 안내서: [BEGINNER_GUIDE.md](BEGINNER_GUIDE.md)
 - 필요한 캡처: 데스크톱 홈, 모바일 홈, 실제 AI 응답 화면, AI 코딩 도구 사용 과정
 
 ## 주의 사항

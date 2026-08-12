@@ -8,7 +8,7 @@
 - [x] 데스크톱·모바일 반응형 레이아웃
 - [x] 기업 검색과 빈 입력 안내
 - [x] 관심종목 추가·해제, 해제 후 되돌리기
-- [x] QUEST 요구사항 준수 점검 문서
+- [x] QUEST 요구사항 준수 확인
 - [x] 전체 코드 구조도·함수·문법 안내서
 - [x] OpenDART 공시 데이터 연동 코드
 - [x] OpenDART 전체 기업명·종목코드 검색과 동적 `corpCode` 조회
@@ -51,5 +51,5 @@
 - [x] GitHub 저장소 URL
 - [x] README.md
 - [x] SERVICE_PLAN.md
-- [x] QUEST_AUDIT.md와 CODE_GUIDE.md
+- [x] CODE_GUIDE.md
 - [ ] 증빙 자료 1세트(현재 실제 AI 동작 장면만 추가 필요)
