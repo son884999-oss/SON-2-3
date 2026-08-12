@@ -1,7 +1,7 @@
 const searchBox = (id = 'search-input') => `
   <div class="searchbox">
-    <input id="${id}" aria-label="기업명 또는 종목코드" placeholder="기업명 또는 종목코드 (예: 삼성전자, 005930)">
-    <button class="primary-btn" id="${id.includes('page') ? 'search-action-page' : 'search-action'}">분석하기</button>
+    <input id="${id}" aria-label="기업명 또는 종목코드" placeholder="기업명 또는 6자리 종목코드 입력">
+    <button class="primary-btn" id="${id.includes('page') ? 'search-action-page' : 'search-action'}">조회하기</button>
   </div>`;
 
 const watchButton = (id, compact = false) => {
@@ -53,7 +53,7 @@ const companyTable = results => `
   </div>`;
 
 function renderHomeViewContent() {
-  return `<section class="home-intro"><div class="container home-layout"><div class="home-search"><p class="kicker">통합 기업공시 검색</p><h1>기업의 이름을 검색해<br>재무 체력을 확인하세요</h1><p class="lede">OpenDART 공시를 바탕으로 수익성, 성장 지속성, 재무 안정성과 현금흐름을 한곳에서 설명합니다.</p>${searchBox()}<p class="search-scope">상장기업은 기업명 또는 6자리 종목코드, 비상장 공시기업은 기업명으로 검색할 수 있습니다.</p><div class="quick-links"><span>주요 기업</span>${Companies.map(c => `<button class="text-btn" data-company="${c.id}">${c.name}</button>`).join('')}</div></div><aside class="home-guide" aria-label="분석 항목"><h2>검색 결과에서 확인할 정보</h2><ol><li><strong>이익 창출력</strong><span>수익성과 최근 5년 이익 흐름</span></li><li><strong>재무 건전성</strong><span>부채, 현금흐름과 단기 상환 여력</span></li><li><strong>가치 지속성</strong><span>성장 근거와 앞으로 확인할 위험</span></li></ol><button class="text-btn glossary-entry" data-view="glossary">재무 용어사전 보기 →</button></aside></div></section><section class="section compact"><div class="container"><div class="section-head"><div><p class="kicker">기업 비교</p><h2>주요 기업 재무 체력</h2><p>같은 기준의 표에서 지표와 핵심 판단을 비교합니다.</p></div><button class="text-btn" data-view="find">조건별 기업 찾기 →</button></div>${companyTable(FindResults.slice(0, 4))}</div></section><div class="disclaimer">본 정보는 기업의 재무 가치를 이해하기 위한 참고 자료이며 매수·매도를 권유하지 않습니다.</div>`;
+  return `<section class="home-intro"><div class="container home-layout"><div class="home-search"><p class="kicker">OpenDART 기업공시 조회</p><h1>기업공시 재무정보 조회</h1><p class="lede">기업명 또는 종목코드를 입력하면 OpenDART 공시를 기준으로 재무정보와 주요 분석 항목을 조회합니다.</p>${searchBox()}<p class="search-scope">상장기업은 기업명 또는 6자리 종목코드, 비상장 공시기업은 기업명으로 검색할 수 있습니다.</p></div><aside class="home-guide" aria-label="조회 결과 안내"><h2>조회 결과 제공 항목</h2><ol><li><strong>이익 창출력</strong><span>수익성과 최근 5년 이익 흐름</span></li><li><strong>재무 건전성</strong><span>부채, 현금흐름과 단기 상환 여력</span></li><li><strong>가치 지속성</strong><span>성장 근거와 앞으로 확인할 위험</span></li></ol><button class="text-btn glossary-entry" data-view="glossary">재무 용어사전 보기 →</button></aside></div></section><div class="disclaimer">본 정보는 기업의 재무 가치를 이해하기 위한 참고 자료이며 매수·매도를 권유하지 않습니다.</div>`;
 }
 
 function renderHomeView() {
