@@ -30,7 +30,10 @@ const applyOfficialTerminology = html => html
   .replaceAll('왜 기업은 검색되나요?', '기업 검색 가능 사유')
   .replaceAll('왜 분석은 안 되나요?', '분석 제한 사유')
   .replaceAll('내 기준에 맞는 기업 비교', '조건별 기업 비교')
-  .replaceAll('중요하게 보는 조건을 선택하면 관련 기업만 남겨 비교할 수 있습니다.', '분석 조건을 선택하여 해당 기업을 비교할 수 있습니다.');
+  .replaceAll('중요하게 보는 조건을 선택하면 관련 기업만 남겨 비교할 수 있습니다.', '분석 조건을 선택하여 해당 기업을 비교할 수 있습니다.')
+  .replaceAll('Gemini 분석', '재무 요약 분석')
+  .replaceAll('Gemini로 쉬운 분석', '재무 요약 분석')
+  .replaceAll('새로 분석하기', '요약 갱신하기');
 
 const companyRow = c => `
   <tr>

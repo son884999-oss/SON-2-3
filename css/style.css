@@ -153,3 +153,26 @@ body,button,input{font-family:Arial,"Malgun Gothic","맑은 고딕",Dotum,"돋�
   .risk-list article{grid-template-columns:48px minmax(0,1fr);gap:12px}
   .conclusion{padding:18px 0}
 }
+
+/* Type and alignment normalization for search results, help links, and notices. */
+body,body *,button,input{font-family:Arial,"Malgun Gothic","맑은 고딕",sans-serif!important}
+.numeric,.score-cell,.score-line strong,.metric-list strong,.health-table strong,.valuation-compare strong{font-family:Arial,"Malgun Gothic","맑은 고딕",sans-serif!important;font-variant-numeric:tabular-nums}
+.company-table{table-layout:auto;line-height:1.5}
+.company-table th,.company-table td{vertical-align:middle}
+.company-table thead th{height:40px;padding-top:9px;padding-bottom:9px;color:#31495f;font-size:12px;letter-spacing:0}
+.company-link{display:block;width:100%;line-height:1.4}
+.company-link strong{font-size:14px;line-height:1.4}
+.company-link span{margin-top:4px;font-size:10px;line-height:1.3}
+.state,.row-note,.row-action-group .text-btn{font-size:12px;line-height:1.5}
+.row-action-group{justify-content:flex-end}
+.term-link{position:relative;display:inline-flex;align-items:baseline;gap:4px;vertical-align:baseline;line-height:1.4;text-decoration:none}
+.term-link:after{content:"";position:absolute;right:0;bottom:0;left:0;border-bottom:1px dotted currentColor}
+.term-link span{position:relative;top:-1px;display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid #9aa8b5;border-radius:0;color:#52677a;font-size:9px;line-height:12px}
+.data-source-banner,.alert{display:flex;align-items:center;justify-content:center;min-height:40px;line-height:1.55;text-align:center}
+.alert span{text-align:center}
+.ai-summary .kicker{letter-spacing:0}
+@media(max-width:640px){
+  .company-table thead th{font-size:11px}
+  .term-link span{width:13px;height:13px;font-size:8px}
+  .data-source-banner,.alert{font-size:11px}
+}

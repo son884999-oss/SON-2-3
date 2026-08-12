@@ -78,7 +78,7 @@ class handler(BaseHTTPRequestHandler):
         if not api_key:
             return self.send_json(
                 503,
-                {"error": "AI 분석 기능이 아직 설정되지 않았습니다."},
+                {"error": "재무 요약 분석 기능이 아직 설정되지 않았습니다."},
             )
 
         model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash").strip()
@@ -87,24 +87,24 @@ class handler(BaseHTTPRequestHandler):
             if not analysis:
                 return self.send_json(
                     502,
-                    {"error": "AI 응답이 비어 있습니다. 잠시 후 다시 시도해주세요."},
+                    {"error": "요약 분석 결과가 비어 있습니다. 잠시 후 다시 시도해주세요."},
                 )
             self.send_json(200, {"analysis": analysis, "model": model})
         except urllib.error.HTTPError as error:
             if error.code == 429:
                 status = 429
-                message = "Gemini 요청 한도를 초과했습니다. 잠시 후 다시 시도해주세요."
+                message = "요약 분석 요청 한도를 초과했습니다. 잠시 후 다시 시도해주세요."
             elif error.code in {400, 401, 403}:
                 status = 502
-                message = "Gemini API 키 또는 모델 설정을 확인해주세요."
+                message = "요약 분석 서비스 설정을 확인해주세요."
             else:
                 status = 502
-                message = "Gemini 서비스 응답을 처리하지 못했습니다."
+                message = "요약 분석 서비스 응답을 처리하지 못했습니다."
             self.send_json(status, {"error": message})
         except (urllib.error.URLError, TimeoutError):
-            self.send_json(504, {"error": "AI 응답이 지연되고 있습니다. 잠시 후 다시 시도해주세요."})
+            self.send_json(504, {"error": "요약 분석 응답이 지연되고 있습니다. 잠시 후 다시 시도해주세요."})
         except Exception:
-            self.send_json(500, {"error": "AI 분석 중 오류가 발생했습니다."})
+            self.send_json(500, {"error": "요약 분석 중 오류가 발생했습니다."})
 
     def do_GET(self):
         self.send_json(405, {"error": "POST 요청만 지원합니다."})
